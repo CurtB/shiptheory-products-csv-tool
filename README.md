@@ -1,3 +1,32 @@
+## Prerequisites
+- Download and install composer if you don't already have it: [https://getcomposer.org/download/](https://getcomposer.org/download/)
+## Installation
+Download or  use terminal/console to 'fetch' this project onto your machine.
+```bash
+git fetch https://github.com/CurtB/shiptheory-products-csv-tool.git
+```
+In terminal/console navigate into the projects root directory (shiptheory-products-csv-tool-main)
+```bash
+cd shiptheory-products-csv-tool
+```
+Initialise the project with composer.
+```bash
+composer install
+```
+Rename `.env.example` file to `.env`inside your project root.
+```bash
+`mv .env.example .env`
+```
+Generate laravel project keys.
+```bash
+php artisan key:generate
+```
+Start local server
+```bash
+php artisan serve
+```
+Open the web address in your browser displayed after 'Starting Laravel development server:' usually something like: http://127.0.0.1:8000
+
 ## This app is built using the PHP framework Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.

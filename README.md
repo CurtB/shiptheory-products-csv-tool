@@ -1,9 +1,9 @@
 ## Prerequisites
 - Download and install composer if you don't already have it: [https://getcomposer.org/download/](https://getcomposer.org/download/)
 ## Installation
-Download or  use terminal/console to 'fetch' this project onto your machine.
+Download or use terminal/console to 'clone' this project onto your machine.
 ```bash
-git fetch https://github.com/CurtB/shiptheory-products-csv-tool.git
+git clone https://github.com/CurtB/shiptheory-products-csv-tool.git
 ```
 In terminal/console navigate into the projects root directory (shiptheory-products-csv-tool-main)
 ```bash
@@ -15,7 +15,7 @@ composer install
 ```
 Rename `.env.example` file to `.env`inside your project root.
 ```bash
-`mv .env.example .env`
+mv .env.example .env
 ```
 Generate laravel project keys.
 ```bash

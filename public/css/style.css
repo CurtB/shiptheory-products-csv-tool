@@ -1,0 +1,204 @@
+/*
+    Author     : Mike Baker
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,700&subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-image: url('../images/full_hero.png');
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+
+p {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
+}
+a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+i {
+	font-size: 12px;
+	margin-left: 6px;
+}
+
+h1 {
+    font-size: 33px;
+    font-weight: 700;
+    line-height: 35px;
+    margin: 0;
+    color: #000;
+    text-transform: uppercase;
+    text-align: center;
+}
+h5, h6 {
+    font-weight: 700;
+}
+
+input, input[type="text"], input[type="email"], input[type="password"] {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 22px;
+    color: #858585;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 17px 15px 15px 35px;
+    width: 100%;
+    height: inherit;
+}
+
+input[type="file"] {
+    border: none;
+    padding-left: 0;
+    font-size: 18px;
+}
+
+input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+}
+label {
+    display: inline-block;
+    font-size: 14px;
+    top: -7px;
+    position: relative;
+    margin-left: 7px;
+}
+label img {
+    position: relative;
+    top: 2px;
+    margin-left: 7px;
+    cursor: pointer;
+}
+#patient {
+    display: none;
+}
+
+button[type="submit"] {
+    background-color: #28a8e6 !important;
+    color: #fafafa !important;
+    text-transform: uppercase;
+    text-align: center;
+    border-radius: 20px;
+    padding: 8px 0;
+    font-size: 20px;
+    font-weight: 700;
+    border: none;
+    line-height: 22px;
+    width: 100%;
+}
+
+#tooltip-info {
+	display: none;
+    position: absolute;
+    top: 30px;
+    background: #29a8e6;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 20px 20px 0 20px;
+    width: 300px;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.8);
+}
+
+hr {
+	margin: 0 0 20px 0;
+	border-top: 1px solid #e0e0e0;
+}
+.auto_fill_inputs {
+	margin-bottom: 20px;
+}
+.auto_fill_inputs input {
+    width: 100px;
+}
+.auto_fill_inputs label {
+    width: 165px;
+    position: relative;
+    top: -2px;
+}
+
+#report {
+    display: none;
+}
+
+.hero-header {
+    padding: 20px 0 20px;
+}
+
+.upload {
+    margin-top: 30px;
+}
+.upload p {
+    color: #000;
+    margin: 10px 0 15px;
+}
+
+.upload-box {
+    background: #f1f1f1;
+    padding: 40px 40px 1px 40px;
+    border-radius: 10px;
+}
+
+.footer {
+    padding: 100px 0;
+    background: #e4e4e4;
+}
+
+.footer hr {
+	border-top: 1px dashed #333333;
+}
+
+.footer h5, .footer p, .footer a, .footer dt, .footer dd {
+    color: #333333;
+}
+.footer p {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.page-footer{
+    color: #fff;
+    background: #28a8e6;
+}
+
+#reference {
+	font-size: 12px;
+}
+
+#reference tr:first-child {
+    border-bottom: 1px solid #e0e0e0;
+}
+#reference tr:nth-child(even) {
+	background: #eeeeee;
+}
+
+#reference th:first-child, #reference td:first-child {
+    padding-left: 15px;
+}
+#reference th:last-child, #reference td:last-child {
+    padding-right: 15px;
+}
+
+#reference td:nth-child(1) {
+    font-weight: bold;
+}
+#reference td:nth-child(1) span {
+    font-weight: normal;
+}
+#reference td:nth-child(2) {
+    font-family: monospace;
+    width: 180px;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+}
+#reference td:nth-child(3) span {
+    font-weight: bold;
+    font-style: italic;
+}

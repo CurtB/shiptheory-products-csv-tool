@@ -61,6 +61,7 @@ class CsvController extends Controller
     }
 
     public function import_csv(Request $request){
+        set_time_limit(240);
         $this->clear_flash_message();
         $redirect = '/';
 
@@ -193,6 +194,7 @@ class CsvController extends Controller
     }
 
     public function export_csv(Request $request){
+        set_time_limit(240);
         $this->clear_flash_message();
         $viewable['mode'] = 'export';
         $redirect = '/';

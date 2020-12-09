@@ -90,19 +90,35 @@ class CsvController extends Controller
         }
         $viewable['authed'] = true;
 
-        // Check valid file type uploaded
+        // Check file selected and is a reasonable size
         $validatedData = $request->validate([
-            'csv_file' => 'required|mimes:csv,txt|max:2048'
+            'csv_file' => 'required|max:10240'
         ]);
         $csv = $request->file('csv_file');
 
-        // Read rows from the file
-        $file_handle = fopen($csv, 'r');
+        // Try to read rows from the file
         $rows = [];
-        while (!feof($file_handle)) {
-            $rows[] = fgetcsv($file_handle, 0, ',' /*delimiter*/);
+        try {
+            $file_handle = fopen($csv, 'r');
+            while (!feof($file_handle)) {
+                $rows[] = fgetcsv($file_handle, 0, ',' /*delimiter*/);
+            }
+            fclose($file_handle);
         }
-        fclose($file_handle);
+        catch(\Exception $e)
+        {
+            $message = "Could not read the csv file. ";
+            if(!empty($e->getMessage())){
+                $message .= '<br /><span style="font-weight: bold;">message:</span> ' .
+                    $e->getMessage();
+            }
+            $message .= 'You could try exporting it using different csv software such as OpenOffice SpreadSheets.';
+            session()->flash('error', $message);
+            return Redirect::to($redirect);
+        }
+        if(empty($rows) || !is_array($rows) || !$rows[0]){
+            return Redirect::to($redirect)->with(['error' => 'Could not find any data rows in the file. Are you sure it was a CSV file? You could try exporting it using different csv software such as OpenOffice SpreadSheets.']);
+        }
 
         // Define which values are in which columns
         $headingRow = 0;
@@ -116,7 +132,7 @@ class CsvController extends Controller
         // Validate there is a product sku column as that is required by Shiptheory
         if(!in_array('sku', $column_value_map)){
             return Redirect::to($redirect)->with(
-                ['error' => 'Could not find product SKU column. Ensure that the first row of your CSV file has the <strong>field titles</strong> like sku, name, price etc.']);
+                ['error' => 'Could not find product SKU column. Ensure that the first row of your <strong>.csv</strong> file has the <strong>field titles</strong> like sku, name, price etc. Download a template file available below under the heading <strong>Sample CSV file</strong> to see the structure of a valid file.']);
         }
 
         // Add products to Shiptheory

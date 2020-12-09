@@ -1,6 +1,5 @@
 ## Live demo 
-- This app is deployed and available to use,
--**[https://shiptheory-products-csv-tool-ebwn2.ondigitalocean.app/](https://shiptheory-products-csv-tool-ebwn2.ondigitalocean.app/)**
+- This app is deployed and available to use, **[https://shiptheory-products-csv-tool-ebwn2.ondigitalocean.app/](https://shiptheory-products-csv-tool-ebwn2.ondigitalocean.app/)**
 
 ## Prerequisites
 - Download and install composer if you don't already have it: [https://getcomposer.org/download/](https://getcomposer.org/download/)

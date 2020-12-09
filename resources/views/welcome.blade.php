@@ -121,6 +121,7 @@
                     <br>
                     <input id="file-input" type="file" name="csv_file" size="25" />
 
+                    <p><strong>Warning:</strong> If you are trying to use large files with hundreds or thousands of products you may encounter errors along the lines of &rdquo;We encountered an error when trying to load your application...&ldquo;. To get round this it can help to break your products into smaller csv files.</p>
                     <button type="submit" class='button-primary mt-3' id="submit-btn">
                         Import CSV
                     </button>

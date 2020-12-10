@@ -41,7 +41,7 @@
                                         {!! $description !!}.
                                     @endforeach
                                 @endforeach
-                            @else
+                            @elseif(is_string($val['error']))
                                 {!! $val['error'] !!}
                             @endif
                             </p>

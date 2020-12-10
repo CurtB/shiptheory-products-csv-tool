@@ -26,6 +26,7 @@ class CsvController extends Controller
             "width" => "width",
             "height" => "height"
         ];
+    private $exc_time_limit = 320; // Maximum number of seconds a csv function can run for
 
     public function welcome(Request $request){
         $viewable['mode'] = Session::get('mode', 'import');
@@ -61,7 +62,7 @@ class CsvController extends Controller
     }
 
     public function import_csv(Request $request){
-        set_time_limit(240);
+        set_time_limit($this->exc_time_limit);
         $this->clear_flash_message();
         $redirect = '/';
 
@@ -124,8 +125,9 @@ class CsvController extends Controller
         $headingRow = 0;
         $column_value_map = [];
         foreach($rows[$headingRow] as $key => $val){
-            if(!empty($this->column_values[strtolower($val)])){
-                $column_value_map[$key] = $this->column_values[strtolower($val)];
+            $val_lc = strtolower($val);
+            if(is_string($val_lc) && !empty($this->column_values[$val_lc])){
+                $column_value_map[$key] = $this->column_values[$val_lc];
             }
         }
 
@@ -140,52 +142,79 @@ class CsvController extends Controller
         foreach($rows as $key => $row){
             if($key == $headingRow) continue; // Skip heading row
 
-            // Organise the values from the row with the column names
-            $product_params = [];
-            foreach($column_value_map as $mapkey => $col_name){
-                $product_params[$col_name] = $row[$mapkey];
-            }
+            try {
+                // Check for has an array of values
+                if(!is_array($row)){
+                    $fails++;
+                    $info = "Failed to read values from the row.";
+                    if(empty($row)) $info .= " The row appears to be empty.";
+                    if(is_string($row)) $info .= " Row data: ".$row;
+                    $viewable['report'][$key] = [
+                        'error' => true,
+                        'info' => $info];
+                    continue;
+                }
 
-            // Validate row
-            if(empty($product_params['sku'])){
-                // Note failed attempt and try next row
+                // Organise the values from the row with the column names
+                $product_params = [];
+                foreach($column_value_map as $mapkey => $col_name){
+                    $product_params[$col_name] = $row[$mapkey];
+                }
+
+                // Validate row
+                if(empty($product_params['sku'])){
+                    // Note failed attempt and try next row
+                    $fails++;
+                    $viewable['report'][$key] = [
+                        'error' => true,
+                        'info' => "No value in sku column found for this row."];
+                    continue;
+                }
+
+                if($viewable['mode'] == 'import'){
+                    // Add product to shiptheory
+                    $response = $this->callShiptheory('POST','products', [], $product_params);
+                    if(!empty($response['error'])){
+                        // Note failed attempt and try next row
+                        $fails++;
+                        $viewable['report'][$key] = $this->reportError(
+                            $response['error'], $product_params);
+                        continue;
+                    }
+                    $response = json_decode($response);
+                }else{
+                    // Update product in shiptheory
+                    $response = $this->callShiptheory('PUT',
+                        'products/update/'.$product_params['sku'], [], $product_params);
+                    if(!empty($response['error'])){
+                        // Note failed attempt and try next row
+                        $fails++;
+                        $viewable['report'][$key] = $this->reportError(
+                            $response['error'], $product_params);
+                        continue;
+                    }
+                    $response = json_decode($response);
+                }
+                if(!empty($response->error)){
+                    $fails++;
+                    $viewable['report'][$key] = $this->reportError(
+                        $response->error, $product_params);
+                }else{
+                    $successes++;
+                }
+            }
+            catch(\Exception $e)
+            {
                 $fails++;
+                $message = "Failed to read values from the row. You could try exporting it using different csv software such as OpenOffice SpreadSheets.";
+                if(!empty($e->getMessage())){
+                    $message .= '<br /><span style="font-weight: bold;">message:</span> ' .
+                        $e->getMessage();
+                }
                 $viewable['report'][$key] = [
                     'error' => true,
-                    'info' => "No value in sku column found for this row."];
+                    'info' => $message];
                 continue;
-            }
-
-            if($viewable['mode'] == 'import'){
-                // Add product to shiptheory
-                $response = $this->callShiptheory('POST','products', [], $product_params);
-                if(!empty($response['error'])){
-                    // Note failed attempt and try next row
-                    $fails++;
-                    $viewable['report'][$key] = $this->reportError(
-                        $response['error'], $product_params);
-                    continue;
-                }
-                $response = json_decode($response);
-            }else{
-                // Update product in shiptheory
-                $response = $this->callShiptheory('PUT',
-                    'products/update/'.$product_params['sku'], [], $product_params);
-                if(!empty($response['error'])){
-                    // Note failed attempt and try next row
-                    $fails++;
-                    $viewable['report'][$key] = $this->reportError(
-                        $response['error'], $product_params);
-                    continue;
-                }
-                $response = json_decode($response);
-            }
-            if(!empty($response->error)){
-                $fails++;
-                $viewable['report'][$key] = $this->reportError(
-                    $response->error, $product_params);
-            }else{
-                $successes++;
             }
         }
 
@@ -210,7 +239,7 @@ class CsvController extends Controller
     }
 
     public function export_csv(Request $request){
-        set_time_limit(240);
+        set_time_limit($this->exc_time_limit);
         $this->clear_flash_message();
         $viewable['mode'] = 'export';
         $redirect = '/';
